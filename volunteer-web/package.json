@@ -1,0 +1,40 @@
+{
+  "name": "volunteer-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@bytemd/plugin-breaks": "^1.18.0",
+    "@bytemd/plugin-frontmatter": "^1.18.0",
+    "@bytemd/plugin-gemoji": "^1.18.0",
+    "@bytemd/plugin-gfm": "^1.18.0",
+    "@bytemd/plugin-highlight": "^1.18.0",
+    "@bytemd/plugin-highlight-ssr": "^1.18.0",
+    "@bytemd/plugin-medium-zoom": "^1.18.0",
+    "@bytemd/plugin-mermaid": "^1.18.0",
+    "@bytemd/vue-next": "^1.18.0",
+    "@element-plus/icons": "^0.0.11",
+    "axios": "^0.27.2",
+    "core-js": "^3.8.3",
+    "echarts": "^5.3.3",
+    "element-china-area-data": "^5.0.2",
+    "element-plus": "^2.2.14",
+    "jwt-decode": "^3.1.2",
+    "sass": "^1.54.5",
+    "vue": "^3.2.37",
+    "vue-axios": "^3.4.1",
+    "vue-router": "4",
+    "vuex": "^4.0.2",
+    "vuex-persistedstate": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.0.3",
+    "bytemd": "^1.18.0",
+    "vite": "^3.0.7"
+  }
+}

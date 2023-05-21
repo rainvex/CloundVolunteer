@@ -1,0 +1,45 @@
+# 服务器端口配置
+server:
+  port: 8081
+
+spring:
+  # 数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/volunteerdb?serverTimezone=UTC&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+  # 设置文件最大上传大小
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  # redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    connect-timeout: 1800000
+    password: 123456
+    lettuce:
+      pool:
+        max-active: 20
+        max-wait: -1
+        max-idle: 5
+        min-idle: 0
+
+# Mybatis-plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
+
+# 支付宝沙箱支付配置
+alipay:
+  app-id:
+  app-private-key:
+  alipay-public-key:
+  # 每次使用natapp进行内网穿透都需要更改此处
+  notify-url: http://rxq25t.natappfree.cc/donate/donateCallback
+  return-url: http://localhost:8080/#/user-detail/DonateRecord

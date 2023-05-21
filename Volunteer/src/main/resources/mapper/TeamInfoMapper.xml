@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.TeamInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.TeamInfo">
+            <id property="teamId" column="TEAM_ID" jdbcType="INTEGER"/>
+            <result property="teamName" column="TEAM_NAME" jdbcType="VARCHAR"/>
+            <result property="teamEmail" column="TEAM_EMAIL" jdbcType="VARCHAR"/>
+            <result property="teamPhone" column="TEAM_PHONE" jdbcType="VARCHAR"/>
+            <result property="teamPassword" column="TEAM_PASSWORD" jdbcType="VARCHAR"/>
+            <result property="teamAddress" column="TEAM_ADDRESS" jdbcType="VARCHAR"/>
+            <result property="teamSimple" column="TEAM_SIMPLE" jdbcType="VARCHAR"/>
+            <result property="teamObject" column="TEAM_OBJECT" jdbcType="VARCHAR"/>
+            <result property="teamAvatar" column="TEAM_AVATAR" jdbcType="VARCHAR"/>
+            <result property="teamProve" column="TEAM_PROVE" jdbcType="VARCHAR"/>
+            <result property="teamClassic" column="TEAM_CLASSIC" jdbcType="VARCHAR"/>
+            <result property="teamRegister" column="TEAM_REGISTER" jdbcType="VARCHAR"/>
+            <result property="teamHeadName" column="TEAM_HEAD_NAME" jdbcType="VARCHAR"/>
+            <result property="teamHeadEmail" column="TEAM_HEAD_EMAIL" jdbcType="VARCHAR"/>
+            <result property="teamHeadPhone" column="TEAM_HEAD_PHONE" jdbcType="VARCHAR"/>
+            <result property="teamHeadIdentity" column="TEAM_HEAD_IDENTITY" jdbcType="VARCHAR"/>
+            <result property="teamHeadPicture" column="TEAM_HEAD_PICTURE" jdbcType="VARCHAR"/>
+            <result property="teamHours" column="TEAM_HOURS" jdbcType="INTEGER"/>
+            <result property="teamActivecount" column="TEAM_ACTIVECOUNT" jdbcType="INTEGER"/>
+            <result property="teamCount" column="TEAM_COUNT" jdbcType="INTEGER"/>
+            <result property="teamType" column="TEAM_TYPE" jdbcType="TINYINT"/>
+            <result property="teamStatus" column="TEAM_STATUS" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        TEAM_ID,TEAM_NAME,TEAM_EMAIL,
+        TEAM_PHONE,TEAM_PASSWORD,TEAM_ADDRESS,
+        TEAM_SIMPLE,TEAM_OBJECT,TEAM_AVATAR,
+        TEAM_PROVE,TEAM_CLASSIC,TEAM_REGISTER,
+        TEAM_HEAD_NAME,TEAM_HEAD_EMAIL,TEAM_HEAD_PHONE,
+        TEAM_HEAD_IDENTITY,TEAM_HEAD_PICTURE,TEAM_HOURS,
+        TEAM_ACTIVECOUNT,TEAM_COUNT,TEAM_TYPE,
+        TEAM_STATUS
+    </sql>
+    <select id="selectOneByTeamHeadPhoneAndTeamStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_team_info
+        where
+        TEAM_HEAD_PHONE = #{teamHeadPhone,jdbcType=VARCHAR}
+        AND TEAM_STATUS = #{teamStatus,jdbcType=NUMERIC}
+    </select>
+    <select id="selectOneByTeamEmailAndTeamPasswordAndTeamStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_team_info
+        where
+        TEAM_EMAIL = #{teamEmail,jdbcType=VARCHAR}
+        AND TEAM_PASSWORD = #{teamPassword,jdbcType=VARCHAR}
+        AND TEAM_STATUS = #{teamStatus,jdbcType=NUMERIC}
+    </select>
+    <select id="selectTeamNameByTeamIdAndTeamStatus" resultMap="BaseResultMap">
+        select TEAM_NAME
+        from t_team_info
+        where TEAM_ID = #{teamId,jdbcType=NUMERIC}
+          AND TEAM_STATUS = #{teamStatus,jdbcType=NUMERIC}
+    </select>
+    <select id="selectTeamIdAndTeamNameAndTeamHoursOrderByTeamHoursDesc" resultMap="BaseResultMap">
+        select TEAM_ID, TEAM_NAME, TEAM_HOURS, TEAM_TYPE
+        from t_team_info where TEAM_STATUS = 1
+        order by TEAM_HOURS desc limit 5
+    </select>
+    <select id="selectMostApplyAndHourLimit" resultMap="BaseResultMap">
+        select t.TEAM_ID,t.TEAM_AVATAR,t.TEAM_NAME,t.TEAM_COUNT,t.TEAM_HOURS,t.TEAM_ADDRESS,t.TEAM_TYPE
+        from (select TEAM_ID,TEAM_AVATAR,TEAM_NAME,TEAM_COUNT,TEAM_HOURS,TEAM_ADDRESS,TEAM_TYPE
+              from t_team_info order by TEAM_HOURS desc) as t
+        left join t_apply_info
+        on FK_AUDITOR_TYPE = 1 and t.TEAM_ID = FK_AUDITOR_ID
+        group by t.TEAM_ID
+        order by count(APPLY_ID) desc
+        limit 6
+    </select>
+
+</mapper>

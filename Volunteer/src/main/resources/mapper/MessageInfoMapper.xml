@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.MessageInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.MessageInfo">
+            <id property="messageId" column="MESSAGE_ID" jdbcType="INTEGER"/>
+            <result property="messageTitle" column="MESSAGE_TITLE" jdbcType="VARCHAR"/>
+            <result property="messageContent" column="MESSAGE_CONTENT" jdbcType="VARCHAR"/>
+            <result property="messageStatus" column="MESSAGE_STATUS" jdbcType="TINYINT"/>
+            <result property="messageTime" column="MESSAGE_TIME" jdbcType="VARCHAR"/>
+            <result property="messageType" column="MESSAGE_TYPE" jdbcType="TINYINT"/>
+            <result property="fkMessageSender" column="FK_MESSAGE_SENDER" jdbcType="INTEGER"/>
+            <result property="fkMessageSendertype" column="FK_MESSAGE_SENDERTYPE" jdbcType="INTEGER"/>
+            <result property="fkMessageAccepter" column="FK_MESSAGE_ACCEPTER" jdbcType="INTEGER"/>
+            <result property="fkMessageAcceptertype" column="FK_MESSAGE_ACCEPTERTYPE" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        MESSAGE_ID,MESSAGE_TITLE,MESSAGE_CONTENT,
+        MESSAGE_STATUS,MESSAGE_TIME,MESSAGE_TYPE,
+        FK_MESSAGE_SENDER,FK_MESSAGE_SENDERTYPE,FK_MESSAGE_ACCEPTER,
+        FK_MESSAGE_ACCEPTERTYPE
+    </sql>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.InformInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.InformInfo">
+            <id property="informId" column="INFORM_ID" jdbcType="INTEGER"/>
+            <result property="informTitle" column="INFORM_TITLE" jdbcType="VARCHAR"/>
+            <result property="informPublic" column="INFORM_PUBLIC" jdbcType="VARCHAR"/>
+            <result property="informContent" column="INFORM_CONTENT" jdbcType="VARCHAR"/>
+            <result property="informFrom" column="INFORM_FROM" jdbcType="VARCHAR"/>
+            <result property="informView" column="INFORM_VIEW" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        INFORM_ID,INFORM_TITLE,INFORM_PUBLIC,
+        INFORM_CONTENT,INFORM_FROM,INFORM_VIEW
+    </sql>
+    <select id="selectInformHighView" resultType="com.xk.volunteer.entity.InformInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from t_inform_info order by INFORM_VIEW desc limit 5
+    </select>
+</mapper>

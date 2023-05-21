@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.UnitInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.UnitInfo">
+            <id property="unitId" column="UNIT_ID" jdbcType="INTEGER"/>
+            <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+            <result property="unitEmail" column="UNIT_EMAIL" jdbcType="VARCHAR"/>
+            <result property="unitPhone" column="UNIT_PHONE" jdbcType="VARCHAR"/>
+            <result property="unitPassword" column="UNIT_PASSWORD" jdbcType="VARCHAR"/>
+            <result property="unitAddress" column="UNIT_ADDRESS" jdbcType="VARCHAR"/>
+            <result property="unitSimple" column="UNIT_SIMPLE" jdbcType="VARCHAR"/>
+            <result property="unitAvatar" column="UNIT_AVATAR" jdbcType="VARCHAR"/>
+            <result property="unitProve" column="UNIT_PROVE" jdbcType="VARCHAR"/>
+            <result property="unitClassic" column="UNIT_CLASSIC" jdbcType="VARCHAR"/>
+            <result property="unitHeadName" column="UNIT_HEAD_NAME" jdbcType="VARCHAR"/>
+            <result property="unitHeadPhone" column="UNIT_HEAD_PHONE" jdbcType="VARCHAR"/>
+            <result property="unitHeadEmail" column="UNIT_HEAD_EMAIL" jdbcType="VARCHAR"/>
+            <result property="unitHeadIdentity" column="UNIT_HEAD_IDENTITY" jdbcType="VARCHAR"/>
+            <result property="unitHeadPicture" column="UNIT_HEAD_PICTURE" jdbcType="VARCHAR"/>
+            <result property="unitRegister" column="UNIT_REGISTER" jdbcType="VARCHAR"/>
+            <result property="unitPubliccount" column="UNIT_PUBLICCOUNT" jdbcType="INTEGER"/>
+            <result property="unitType" column="UNIT_TYPE" jdbcType="TINYINT"/>
+            <result property="unitStatus" column="UNIT_STATUS" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        UNIT_ID,UNIT_NAME,UNIT_EMAIL,
+        UNIT_PHONE,UNIT_PASSWORD,UNIT_ADDRESS,
+        UNIT_SIMPLE,UNIT_AVATAR,UNIT_PROVE,
+        UNIT_CLASSIC,UNIT_HEAD_NAME,UNIT_HEAD_PHONE,
+        UNIT_HEAD_EMAIL,UNIT_HEAD_IDENTITY,UNIT_HEAD_PICTURE,
+        UNIT_REGISTER,UNIT_PUBLICCOUNT,UNIT_TYPE,
+        UNIT_STATUS
+    </sql>
+    <select id="selectOneByUnitHeadPhoneAndUnitStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_unit_info
+        where
+        UNIT_HEAD_PHONE = #{unitHeadPhone,jdbcType=VARCHAR}
+        AND UNIT_STATUS = #{unitStatus,jdbcType=NUMERIC}
+    </select>
+    <select id="selectOneByUnitEmailAndUnitPasswordAndUnitStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_unit_info
+        where
+        UNIT_EMAIL = #{unitEmail,jdbcType=VARCHAR}
+        AND UNIT_PASSWORD = #{unitPassword,jdbcType=VARCHAR}
+        AND UNIT_STATUS = #{unitStatus,jdbcType=NUMERIC}
+    </select>
+    <select id="selectUnitNameByUnitId" resultType="string">
+        select UNIT_NAME
+        from t_unit_info
+        where UNIT_ID = #{unitId,jdbcType=NUMERIC}
+    </select>
+    <select id="selectMostApplyAndCountLimit" resultMap="BaseResultMap">
+        select UNIT_ID,UNIT_AVATAR,UNIT_NAME,UNIT_PUBLICCOUNT,UNIT_ADDRESS,u.UNIT_TYPE
+        from (select UNIT_ID,UNIT_AVATAR,UNIT_NAME,UNIT_PUBLICCOUNT,UNIT_ADDRESS,UNIT_TYPE
+              from t_unit_info order by UNIT_PUBLICCOUNT desc) as u
+        left join t_apply_info
+        on FK_AUDITOR_TYPE = 2 and UNIT_ID = FK_AUDITOR_ID
+        group by UNIT_ID
+        order by count(APPLY_ID) desc
+        limit 6
+    </select>
+</mapper>

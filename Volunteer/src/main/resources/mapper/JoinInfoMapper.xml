@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.JoinInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.JoinInfo">
+            <id property="joinId" column="JOIN_ID" jdbcType="INTEGER"/>
+            <result property="joinStatus" column="JOIN_STATUS" jdbcType="TINYINT"/>
+            <result property="fkJoinActivity" column="FK_JOIN_ACTIVITY" jdbcType="INTEGER"/>
+            <result property="fkJoinVolunteer" column="FK_JOIN_VOLUNTEER" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        JOIN_ID,JOIN_STATUS,FK_JOIN_ACTIVITY,
+        FK_JOIN_VOLUNTEER
+    </sql>
+    <select id="selectJoinByVolunteerStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_join_info
+        left join t_volunteers_info on FK_JOIN_VOLUNTEER = VOLUNTEERS_ID
+        where FK_JOIN_ACTIVITY = #{fkJoinActivity,jdbcType=NUMERIC} and VOLUNTEERS_STATUS = 1
+    </select>
+    <select id="selectJoinByActivityShowPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_join_info
+        left join t_activity_info on FK_JOIN_ACTIVITY = ACTIVITY_ID
+        where FK_JOIN_VOLUNTEER = #{fkJoinVolunteer,jdbcType=NUMERIC} and ACTIVITY_SHOW = 1
+        order by ACTIVITY_PUBLIC desc limit #{startIndex,jdbcType=NUMERIC},10
+    </select>
+</mapper>

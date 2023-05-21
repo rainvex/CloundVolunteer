@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.AdminInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.AdminInfo">
+            <id property="adminId" column="ADMIN_ID" jdbcType="INTEGER"/>
+            <result property="adminName" column="ADMIN_NAME" jdbcType="VARCHAR"/>
+            <result property="adminPassword" column="ADMIN_PASSWORD" jdbcType="VARCHAR"/>
+            <result property="adminAvatar" column="ADMIN_AVATAR" jdbcType="VARCHAR"/>
+            <result property="adminPhone" column="ADMIN_PHONE" jdbcType="VARCHAR"/>
+            <result property="adminEmail" column="ADMIN_EMAIL" jdbcType="VARCHAR"/>
+            <result property="adminType" column="ADMIN_TYPE" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ADMIN_ID,ADMIN_NAME,ADMIN_PASSWORD,
+        ADMIN_AVATAR,ADMIN_PHONE,ADMIN_EMAIL,
+        ADMIN_TYPE
+    </sql>
+    <select id="selectOneByAdminPhone" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_admin_info
+        where
+        ADMIN_PHONE = #{adminPhone,jdbcType=VARCHAR}
+    </select>
+    <select id="selectOneByAdminEmailAndAdminPassword" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_admin_info
+        where
+        ADMIN_EMAIL = #{adminEmail,jdbcType=VARCHAR}
+        AND ADMIN_PASSWORD = #{adminPassword,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

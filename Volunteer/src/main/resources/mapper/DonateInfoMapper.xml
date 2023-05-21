@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.DonateInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.DonateInfo">
+            <id property="donateId" column="DONATE_ID" jdbcType="INTEGER"/>
+            <result property="donateAmount" column="DONATE_AMOUNT" jdbcType="VARCHAR"/>
+            <result property="donateDate" column="DONATE_DATE" jdbcType="VARCHAR"/>
+            <result property="fkDonateUser" column="FK_DONATE_USER" jdbcType="INTEGER"/>
+            <result property="fkDonateUsertype" column="FK_DONATE_USERTYPE" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        DONATE_ID,DONATE_AMOUNT,DONATE_DATE,
+        FK_DONATE_USER,FK_DONATE_USERTYPE
+    </sql>
+    <select id="statisticsDonateCount" resultType="java.lang.Long">
+        select SUM(DONATE_AMOUNT) from t_donate_info;
+    </select>
+</mapper>

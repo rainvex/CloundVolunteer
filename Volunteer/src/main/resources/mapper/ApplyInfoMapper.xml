@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.ApplyInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.ApplyInfo">
+            <id property="applyId" column="APPLY_ID" jdbcType="INTEGER"/>
+            <result property="applyTitle" column="APPLY_TITLE" jdbcType="VARCHAR"/>
+            <result property="applyDescription" column="APPLY_DESCRIPTION" jdbcType="VARCHAR"/>
+            <result property="applyTime" column="APPLY_TIME" jdbcType="VARCHAR"/>
+            <result property="applyType" column="APPLY_TYPE" jdbcType="TINYINT"/>
+            <result property="applyStatus" column="APPLY_STATUS" jdbcType="TINYINT"/>
+            <result property="applyAudittime" column="APPLY_AUDITTIME" jdbcType="VARCHAR"/>
+            <result property="fkApplicantId" column="FK_APPLICANT_ID" jdbcType="INTEGER"/>
+            <result property="fkApplicantType" column="FK_APPLICANT_TYPE" jdbcType="TINYINT"/>
+            <result property="fkAuditorId" column="FK_AUDITOR_ID" jdbcType="INTEGER"/>
+            <result property="fkAuditorType" column="FK_AUDITOR_TYPE" jdbcType="TINYINT"/>
+            <result property="fkAppliedActivity" column="FK_APPLIED_ACTIVITY" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        APPLY_ID,APPLY_TITLE,APPLY_DESCRIPTION,
+        APPLY_TIME,APPLY_TYPE,APPLY_STATUS,APPLY_AUDITTIME,
+        FK_APPLICANT_ID,FK_APPLICANT_TYPE,
+        FK_AUDITOR_ID,FK_AUDITOR_TYPE,FK_APPLIED_ACTIVITY
+    </sql>
+    <select id="selectApplyByActivityShow" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_apply_info left join t_activity_info on FK_APPLIED_ACTIVITY = ACTIVITY_ID
+        where FK_APPLICANT_ID = #{userId,jdbcType=NUMERIC} and FK_APPLICANT_TYPE = #{userType,jdbcType=NUMERIC}
+        and APPLY_TYPE = #{applyType,jdbcType=NUMERIC} and ACTIVITY_SHOW = 1 order by APPLY_TIME desc limit #{startIndex},12
+    </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.ActivityInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.ActivityInfo">
+            <id property="activityId" column="ACTIVITY_ID" jdbcType="INTEGER"/>
+            <result property="activityTitle" column="ACTIVITY_TITLE" jdbcType="VARCHAR"/>
+            <result property="activityClassic" column="ACTIVITY_CLASSIC" jdbcType="VARCHAR"/>
+            <result property="activityPublic" column="ACTIVITY_PUBLIC" jdbcType="VARCHAR"/>
+            <result property="activityBanner" column="ACTIVITY_BANNER" jdbcType="VARCHAR"/>
+            <result property="activityContinue" column="ACTIVITY_CONTINUE" jdbcType="VARCHAR"/>
+            <result property="activityPlace" column="ACTIVITY_PLACE" jdbcType="VARCHAR"/>
+            <result property="activitySimple" column="ACTIVITY_SIMPLE" jdbcType="VARCHAR"/>
+            <result property="activityContent" column="ACTIVITY_CONTENT" jdbcType="VARCHAR"/>
+            <result property="activityRequire" column="ACTIVITY_REQUIRE" jdbcType="VARCHAR"/>
+            <result property="activityContact" column="ACTIVITY_CONTACT" jdbcType="VARCHAR"/>
+            <result property="activityPhone" column="ACTIVITY_PHONE" jdbcType="VARCHAR"/>
+            <result property="activityCutoff" column="ACTIVITY_CUTOFF" jdbcType="VARCHAR"/>
+            <result property="activityLimit" column="ACTIVITY_LIMIT" jdbcType="TINYINT"/>
+            <result property="activityShow" column="ACTIVITY_SHOW" jdbcType="TINYINT"/>
+            <result property="fkActivityPublisher" column="FK_ACTIVITY_PUBLISHER" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="ActivityClassicCountMap" type="com.xk.volunteer.controller.pojo.ActivityClassicCount">
+        <result property="activityClassic" column="ACTIVITY_CLASSIC" jdbcType="VARCHAR"/>
+        <result property="classicCount" column="CLASSIC_COUNT" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ACTIVITY_ID,ACTIVITY_TITLE,ACTIVITY_CLASSIC,
+        ACTIVITY_PUBLIC,ACTIVITY_BANNER,ACTIVITY_CONTINUE,
+        ACTIVITY_PLACE,ACTIVITY_SIMPLE,ACTIVITY_CONTENT,
+        ACTIVITY_REQUIRE,ACTIVITY_CONTACT,ACTIVITY_PHONE,
+        ACTIVITY_CUTOFF,ACTIVITY_LIMIT,ACTIVITY_SHOW,
+        FK_ACTIVITY_PUBLISHER
+    </sql>
+    <select id="selectMostApplyAndPublic" resultMap="BaseResultMap">
+        select a.ACTIVITY_ID,a.ACTIVITY_BANNER,a.ACTIVITY_TITLE,a.ACTIVITY_PUBLIC,a.FK_ACTIVITY_PUBLISHER
+        from (select ACTIVITY_ID,ACTIVITY_BANNER,ACTIVITY_TITLE,ACTIVITY_PUBLIC,FK_ACTIVITY_PUBLISHER
+              from t_activity_info where ACTIVITY_SHOW = 1 order by ACTIVITY_PUBLIC desc) as a
+        left join t_apply_info
+        on APPLY_TYPE = 0 and a.ACTIVITY_ID = FK_APPLIED_ACTIVITY
+        group by a.ACTIVITY_ID
+        order by COUNT(APPLY_ID) desc
+        limit 6
+    </select>
+    <select id="selectActivityClassicCount" resultMap="ActivityClassicCountMap">
+        select ACTIVITY_CLASSIC, COUNT(*) AS CLASSIC_COUNT from t_activity_info group by ACTIVITY_CLASSIC;
+    </select>
+
+</mapper>

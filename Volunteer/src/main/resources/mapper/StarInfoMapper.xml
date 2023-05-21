@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.StarInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.StarInfo">
+            <id property="starId" column="STAR_ID" jdbcType="INTEGER"/>
+            <result property="fkStarActivity" column="FK_STAR_ACTIVITY" jdbcType="INTEGER"/>
+            <result property="fkStarVolunteer" column="FK_STAR_VOLUNTEER" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        STAR_ID,FK_STAR_ACTIVITY,FK_STAR_VOLUNTEER
+    </sql>
+
+    <select id="selectStarByActivityShow" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_star_info left join t_activity_info on FK_STAR_ACTIVITY = ACTIVITY_ID
+        where FK_STAR_VOLUNTEER = #{userId} and ACTIVITY_SHOW = 1 order by STAR_ID desc limit #{startIndex},12
+    </select>
+</mapper>

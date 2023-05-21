@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.volunteer.mapper.VolunteersInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xk.volunteer.entity.VolunteersInfo">
+            <id property="volunteersId" column="VOLUNTEERS_ID" jdbcType="INTEGER"/>
+            <result property="volunteersUsername" column="VOLUNTEERS_USERNAME" jdbcType="VARCHAR"/>
+            <result property="volunteersEmail" column="VOLUNTEERS_EMAIL" jdbcType="VARCHAR"/>
+            <result property="volunteersPhone" column="VOLUNTEERS_PHONE" jdbcType="VARCHAR"/>
+            <result property="volunteersPassword" column="VOLUNTEERS_PASSWORD" jdbcType="VARCHAR"/>
+            <result property="volunteersPolitical" column="VOLUNTEERS_POLITICAL" jdbcType="VARCHAR"/>
+            <result property="volunteersProfessional" column="VOLUNTEERS_PROFESSIONAL" jdbcType="VARCHAR"/>
+            <result property="volunteersDegree" column="VOLUNTEERS_DEGREE" jdbcType="VARCHAR"/>
+            <result property="volunteersAddress" column="VOLUNTEERS_ADDRESS" jdbcType="VARCHAR"/>
+            <result property="volunteersProvince" column="VOLUNTEERS_PROVINCE" jdbcType="VARCHAR"/>
+            <result property="volunteersAvatar" column="VOLUNTEERS_AVATAR" jdbcType="VARCHAR"/>
+            <result property="volunteersRegister" column="VOLUNTEERS_REGISTER" jdbcType="VARCHAR"/>
+            <result property="volunteersSimple" column="VOLUNTEERS_SIMPLE" jdbcType="VARCHAR"/>
+            <result property="volunteersName" column="VOLUNTEERS_NAME" jdbcType="VARCHAR"/>
+            <result property="volunteersGender" column="VOLUNTEERS_GENDER" jdbcType="VARCHAR"/>
+            <result property="volunteersBirth" column="VOLUNTEERS_BIRTH" jdbcType="VARCHAR"/>
+            <result property="volunteersNational" column="VOLUNTEERS_NATIONAL" jdbcType="VARCHAR"/>
+            <result property="volunteersNative" column="VOLUNTEERS_NATIVE" jdbcType="VARCHAR"/>
+            <result property="volunteersCard" column="VOLUNTEERS_CARD" jdbcType="VARCHAR"/>
+            <result property="volunteersHours" column="VOLUNTEERS_HOURS" jdbcType="INTEGER"/>
+            <result property="volunteersActivecount" column="VOLUNTEERS_ACTIVECOUNT" jdbcType="INTEGER"/>
+            <result property="volunteersBreak" column="VOLUNTEERS_BREAK" jdbcType="INTEGER"/>
+            <result property="volunteersType" column="VOLUNTEERS_TYPE" jdbcType="TINYINT"/>
+            <result property="volunteersIsapplyteam" column="VOLUNTEERS_ISAPPLYTEAM" jdbcType="TINYINT"/>
+            <result property="volunteersStatus" column="VOLUNTEERS_STATUS" jdbcType="TINYINT"/>
+            <result property="fkVolunteersTeam" column="FK_VOLUNTEERS_TEAM" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="ProvinceVolunteerCount" type="com.xk.volunteer.controller.pojo.ProvinceVolunteerCount">
+        <result property="provinceName" column="VOLUNTEERS_PROVINCE" jdbcType="VARCHAR"/>
+        <result property="volunteerCount" column="VOLUNTEERS_COUNT" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        VOLUNTEERS_ID,VOLUNTEERS_USERNAME,VOLUNTEERS_EMAIL,
+        VOLUNTEERS_PHONE,VOLUNTEERS_PASSWORD,VOLUNTEERS_POLITICAL,
+        VOLUNTEERS_PROFESSIONAL,VOLUNTEERS_DEGREE,VOLUNTEERS_ADDRESS,
+        VOLUNTEERS_PROVINCE,VOLUNTEERS_AVATAR,VOLUNTEERS_REGISTER,
+        VOLUNTEERS_SIMPLE,VOLUNTEERS_NAME,VOLUNTEERS_GENDER,VOLUNTEERS_BIRTH,
+        VOLUNTEERS_NATIONAL,VOLUNTEERS_NATIVE,VOLUNTEERS_CARD,
+        VOLUNTEERS_HOURS,VOLUNTEERS_ACTIVECOUNT,VOLUNTEERS_BREAK,
+        VOLUNTEERS_TYPE,VOLUNTEERS_ISAPPLYTEAM,
+        VOLUNTEERS_STATUS,FK_VOLUNTEERS_TEAM
+    </sql>
+    <select id="selectOneByVolunteersPhoneAndVolunteersStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_volunteers_info
+        where
+        VOLUNTEERS_PHONE = #{volunteersPhone,jdbcType=VARCHAR}
+        AND VOLUNTEERS_STATUS = #{volunteersStatus,jdbcType=NUMERIC}
+    </select>
+    <select id="selectOneByVolunteersEmailAndVolunteersPasswordAndVolunteersStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_volunteers_info
+        where
+        VOLUNTEERS_EMAIL = #{volunteersEmail,jdbcType=VARCHAR}
+        AND VOLUNTEERS_PASSWORD = #{volunteersPassword,jdbcType=VARCHAR}
+        AND VOLUNTEERS_STATUS = #{volunteersStatus,jdbcType=NUMERIC}
+    </select>
+    <select id="selectOneByVolunteersIdAndVolunteersStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_volunteers_info
+        where
+        VOLUNTEERS_ID = #{volunteersId,jdbcType=NUMERIC}
+        AND VOLUNTEERS_STATUS = #{volunteersStatus,jdbcType=NUMERIC}
+    </select>
+    <select id="selectTotalHours" resultType="long">
+        select
+        sum(VOLUNTEERS_HOURS)
+        from t_volunteers_info
+        where VOLUNTEERS_STATUS = 1
+    </select>
+    <select id="selectVolunteersIdAndVolunteersUsernameAndVolunteersHoursOrderByVolunteersHoursDesc"
+            resultMap="BaseResultMap">
+        select VOLUNTEERS_ID, VOLUNTEERS_USERNAME, VOLUNTEERS_HOURS, VOLUNTEERS_TYPE
+        from t_volunteers_info where VOLUNTEERS_STATUS = 1
+        order by VOLUNTEERS_HOURS desc limit 5
+    </select>
+    <select id="selectProvinceVolunteerCount" resultMap="ProvinceVolunteerCount">
+        select VOLUNTEERS_PROVINCE, COUNT(*) AS VOLUNTEERS_COUNT from t_volunteers_info group by VOLUNTEERS_PROVINCE;
+    </select>
+</mapper>
